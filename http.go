@@ -39,6 +39,6 @@ func sendMessage(w http.ResponseWriter, r *http.Request) {
 }
 
 func HttpServer() {
-	http.HandleFunc("/send", sendMessage)
+	http.HandleFunc("/send/", sendMessage)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

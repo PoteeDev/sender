@@ -1,10 +1,10 @@
 FROM golang:1.18-alpine as builder
 WORKDIR /usr/app
 # copy go.mod and go.sum 
-ADD go.* .
+ADD go.* ./
 RUN go mod download
 # copy src
-ADD *.go .
+ADD *.go ./
 COPY providers/ providers/
 RUN CGO_ENABLED=0 GOOS=linux go build -a -o bot .
 
