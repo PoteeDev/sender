@@ -6,6 +6,7 @@ RUN go mod download
 # copy src
 ADD *.go ./
 COPY providers/ providers/
+COPY servers/  servers/
 RUN CGO_ENABLED=0 GOOS=linux go build -a -o bot .
 
 FROM alpine:3

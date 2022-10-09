@@ -1,19 +1,21 @@
-package main
+package servers
 
 import (
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"strings"
 
 	"github.com/PoteeDev/sender/providers"
 )
 
-func sendMessage(w http.ResponseWriter, r *http.Request) {
-	providerName := strings.TrimPrefix(r.URL.Path, "/send/")
+type JsonMessage struct {
+	Recipient string `json:"recipient"`
+	Message   string `json:"message"`
+	Mode      string `json:"mode"`
+}
 
+func sendMessage(w http.ResponseWriter, r *http.Request) {
 	var message JsonMessage
 	// decode json data
 	err := json.NewDecoder(r.Body).Decode(&message)
@@ -22,18 +24,8 @@ func sendMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// init tg provider and send message
-	switch providerName {
-	case "telegram":
-		token := os.Getenv("BOT_TOKEN")
-		err := providers.NewMessage(token, message.ChatID, message.Message, "").Send()
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-	default:
-		http.Error(w, "invalid path", http.StatusBadRequest)
-		return
-	}
+	providers.NewProvider().Send(message.Recipient, message.Message, message.Mode)
+
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "ok\n")
 }

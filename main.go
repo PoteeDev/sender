@@ -3,13 +3,9 @@ package main
 import (
 	"log"
 	"os"
-)
 
-type JsonMessage struct {
-	ChatID  string `json:"chat_id"`
-	Message string `json:"message"`
-	Mode    string `json:"mode"`
-}
+	"github.com/PoteeDev/sender/servers"
+)
 
 var modes = []string{"http", "amqp"}
 
@@ -21,10 +17,10 @@ func main() {
 	switch mode {
 	case "http":
 		log.Println("Run HTTP Reciver...")
-		HttpServer()
+		servers.HttpServer()
 	case "amqp":
 		log.Println("Run AMQP Reciver...")
-		AMQPReciver()
+		servers.AMQPReciver()
 	}
 
 }

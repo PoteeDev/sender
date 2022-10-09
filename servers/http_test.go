@@ -1,4 +1,4 @@
-package main
+package servers
 
 import (
 	"bytes"
@@ -10,8 +10,8 @@ import (
 
 func TestSendHTTPMessage(t *testing.T) {
 	testData := map[string]string{
-		"chat_id": "345182391",
-		"message": "hello, http!",
+		"recipient": "naliway",
+		"message":   "hello, http!",
 	}
 	b, _ := json.Marshal(testData)
 	req := httptest.NewRequest("POST", "/send/telegram", bytes.NewBuffer(b))

@@ -1,4 +1,4 @@
-package main
+package servers
 
 import (
 	"bytes"
@@ -78,11 +78,8 @@ func AMQPReciver() {
 				log.Println(err)
 			}
 			log.Printf("received a message: %s", message)
-			token := os.Getenv("BOT_TOKEN")
-			err = providers.NewMessage(token, message.ChatID, message.Message, "").Send()
-			if err != nil {
-				log.Println(err)
-			}
+			providers.NewProvider().Send(message.Recipient, message.Message, message.Mode)
+
 		}
 	}()
 

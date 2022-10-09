@@ -1,4 +1,4 @@
-package main
+package servers
 
 import (
 	"context"
@@ -32,8 +32,8 @@ func TestSendAmqp(t *testing.T) {
 	defer cancel()
 
 	testData := map[string]string{
-		"chat_id": "345182391",
-		"message": "hello, amqp!",
+		"recipient": "naliway",
+		"message":   "hello, amqp!",
 	}
 	b, _ := json.Marshal(testData)
 	err = ch.PublishWithContext(ctx,

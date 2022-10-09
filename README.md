@@ -13,7 +13,7 @@ docker-compsoe up -d
 #### Http example
 ```
 docker build -t sender .
-docker run --rm -p 8080:8080 -e BOT_TOKEN=<telegram_bot_token> sender http
+docker run --rm -p 8080:8080 -e PROVIDER=telegram -e BOT_TOKEN=<telegram_bot_token> sender http
 ```
 
 ### Send Message

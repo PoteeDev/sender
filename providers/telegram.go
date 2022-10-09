@@ -6,31 +6,39 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 type TelegramMessage struct {
 	BotToken string
-	ChatID   string
+	ChatIDs  []string
 	Message  string
 	Mode     string
 }
 
-func NewMessage(botToken, chatId, message, mode string) *TelegramMessage {
-	if botToken == "" {
-		log.Fatal("BotToken is empty")
-	}
-	return &TelegramMessage{
+func NewTelegramMessage(recipient, message, mode string) *TelegramMessage {
+	botToken := os.Getenv("BOT_TOKEN")
+	tm := TelegramMessage{
 		BotToken: botToken,
-		ChatID:   chatId,
 		Message:  message,
 		Mode:     mode,
 	}
+	tm.GetChatIds(recipient)
+	return &tm
 }
 
-func (tm *TelegramMessage) Send() error {
+func (tm *TelegramMessage) Send() {
+	for _, chatId := range tm.ChatIDs {
+		if err := tm.SendMessage(chatId); err != nil {
+			log.Println("send message error:", err)
+		}
+	}
+}
+
+func (tm *TelegramMessage) SendMessage(ChatId string) error {
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", tm.BotToken)
 	body, _ := json.Marshal(map[string]string{
-		"chat_id":    tm.ChatID,
+		"chat_id":    ChatId,
 		"text":       tm.Message,
 		"parce_mode": tm.Mode,
 	})
@@ -38,6 +46,17 @@ func (tm *TelegramMessage) Send() error {
 	if err != nil {
 		return err
 	}
-	log.Println("send message to:", tm.ChatID)
+	log.Println("send message to:", ChatId)
 	return nil
+}
+
+func (tm *TelegramMessage) GetChatIds(recipient string) {
+	// TODO: Get chat_ids from database
+
+	// Test recipients
+	recipients := map[string][]string{"naliway": {"345182391"}}
+	chatIds := recipients[recipient]
+
+	tm.ChatIDs = chatIds
+	log.Println("chat ids:", tm.ChatIDs)
 }

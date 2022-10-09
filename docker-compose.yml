@@ -5,10 +5,12 @@ services:
       context: .
     command: amqp
     environment:
+      - PROVIDER=telegram
       - BOT_TOKEN=$BOT_TOKEN
       - RABBITMQ_HOST=test-rabbitmq
       - RABBITMQ_USER=services
       - RABBITMQ_PASS=$RABBITMQ_PASS
+
 
   # http mode configuration
   # bot:
