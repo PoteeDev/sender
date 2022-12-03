@@ -3,6 +3,7 @@ services:
   bot:
     build:
       context: .
+    image: explabs/potee-sender
     command: amqp
     environment:
       - PROVIDER=telegram

@@ -23,7 +23,8 @@ func NewTelegramMessage(recipient, message, mode string) *TelegramMessage {
 		Message:  message,
 		Mode:     mode,
 	}
-	tm.GetChatIds(recipient)
+	tm.ChatIDs = []string{recipient}
+	//tm.GetChatIds(recipient)
 	return &tm
 }
 
@@ -40,7 +41,7 @@ func (tm *TelegramMessage) SendMessage(ChatId string) error {
 	body, _ := json.Marshal(map[string]string{
 		"chat_id":    ChatId,
 		"text":       tm.Message,
-		"parce_mode": tm.Mode,
+		"parse_mode": tm.Mode,
 	})
 	_, err := http.Post(url, "application/json", bytes.NewBuffer(body))
 	if err != nil {
